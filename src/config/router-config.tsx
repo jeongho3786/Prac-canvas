@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import Main from "../main";
-import MouseDrawing from "../page/mouse-drawing";
+import MouseDrawingPage from "../pages/mouse-drawing-page";
 
 const router = createBrowserRouter([
   {
@@ -10,7 +10,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "mouse-drawing",
-        element: <MouseDrawing />,
+        element: <MouseDrawingPage />,
       },
     ],
   },
