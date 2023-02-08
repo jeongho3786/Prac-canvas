@@ -20,6 +20,8 @@ export default Main;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
 `;
@@ -27,19 +29,24 @@ const Container = styled.div`
 const NavBar = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 0px 50px;
-  min-height: 60px;
+  height: 80px;
 `;
 
 const CanvasContainer = styled.div`
-  flex: 1;
-  border: thick double #07553b;
+  border: solid var(--secondary);
+  border-radius: 10px;
+  background-color: #ffffff;
+  width: 500px;
+  height: 500px;
 `;
 
 const Button = styled(Link)`
   all: unset;
-  background-color: #ced46a;
+  background-color: var(--primary);
+  color: var(--secondary);
+  padding: 15px 30px;
   border-radius: 10px;
-  padding: 10px 30px;
   cursor: pointer;
 `;

@@ -1,3 +1,14 @@
+:root {
+  --primary: #e2d3f3;
+  --secondary: #013dc4;
+}
+
+@font-face {
+  font-family: "DungGeunMo";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff")
+    format("woff");
+}
+
 html,
 body,
 div#root {
@@ -7,4 +18,9 @@ div#root {
 body {
   margin: 0;
   padding: 0;
+  font-family: "DungGeunMo", Arial, Helvetica, sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
