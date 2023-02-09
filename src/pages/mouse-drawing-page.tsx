@@ -1,52 +1,46 @@
-import styled from "styled-components";
+import type { EditMode } from "src/types/mouse-drawing-page";
+import { useState } from "react";
 
-import useCanvasDrawing from "../hooks/use-canvas-drawing";
-import useCanvas from "../hooks/use-canvas";
+import useCanvasDrawing from "src/hooks/use-canvas-drawing";
+import useCanvasErasing from "src/hooks/use-canvas-erasing";
+import useCanvas from "src/hooks/use-canvas";
 
-import pencilIcon from "src/asset/icon/pencil-icon.png";
+import FunctionButtons from "src/components/mouse-drawing-page/function-buttons";
 
 const MouseDrawingPage = () => {
   const { canvasRef, fallbackMessage, canvasContext } = useCanvas();
   const { handleDrawing, handleDrawingStart, handleDrawingFinsih } =
     useCanvasDrawing(canvasContext);
+  const { handleErasing, handleErasingStart, handleErasingFinsih } =
+    useCanvasErasing(canvasContext);
+
+  const [editMode, setEditMode] = useState<EditMode>("draw");
+
+  const handleEditMode = (mode: EditMode) => {
+    setEditMode(mode);
+  };
 
   return (
     <>
       <canvas
         ref={canvasRef}
-        onMouseDown={handleDrawingStart}
-        onMouseUp={handleDrawingFinsih}
-        onMouseLeave={handleDrawingFinsih}
-        onMouseMove={handleDrawing}
+        onMouseDown={
+          editMode === "draw" ? handleDrawingStart : handleErasingStart
+        }
+        onMouseUp={
+          editMode === "draw" ? handleDrawingFinsih : handleErasingFinsih
+        }
+        onMouseLeave={
+          editMode === "draw" ? handleDrawingFinsih : handleErasingFinsih
+        }
+        onMouseMove={editMode === "draw" ? handleDrawing : handleErasing}
       >
         {fallbackMessage}
       </canvas>
 
-      <IconButtonContainer>
-        <IconButton>
-          <img
-            src={pencilIcon}
-            alt="pencilIcon"
-            style={{ width: "40px", height: "40px" }}
-          />
-        </IconButton>
-      </IconButtonContainer>
+      <FunctionButtons editMode={editMode} onClick={handleEditMode} />
     </>
   );
 };
 
 export default MouseDrawingPage;
-
-const IconButtonContainer = styled.div`
-  width: 100%;
-  padding: 20px 0px;
-`;
-
-const IconButton = styled.button`
-  all: unset;
-  background-color: var(--primary);
-  color: var(--secondary);
-  padding: 10px 10px;
-  border-radius: 10px;
-  cursor: pointer;
-`;
