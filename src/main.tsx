@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+
+import MenuButtons from "src/components/common/menu-buttons";
 
 const Main = () => {
   return (
     <Container>
-      <NavBar>
-        <Button to="mouse-drawing">마우스 드로잉</Button>
-      </NavBar>
+      <MenuButtons />
 
       <CanvasContainer>
         <Outlet />
@@ -26,27 +26,10 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const NavBar = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0px 50px;
-  height: 80px;
-`;
-
 const CanvasContainer = styled.div`
   border: solid var(--secondary);
   border-radius: 10px;
   background-color: #ffffff;
   width: 500px;
   height: 500px;
-`;
-
-const Button = styled(Link)`
-  all: unset;
-  background-color: var(--primary);
-  color: var(--secondary);
-  padding: 15px 30px;
-  border-radius: 10px;
-  cursor: pointer;
 `;
