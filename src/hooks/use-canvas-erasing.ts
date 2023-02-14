@@ -17,7 +17,7 @@ const useCanvasErasing = (canvasContext: CanvasRenderingContext2D | null) => {
       return;
     }
 
-    canvasContext.clearRect(offsetX, offsetY, 50, 50);
+    canvasContext.clearRect(offsetX - 25, offsetY - 25, 50, 50);
   };
 
   const handleErasingStart = () => {
