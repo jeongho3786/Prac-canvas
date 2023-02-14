@@ -1,8 +1,8 @@
 import type { EditMode } from "src/types/mouse-drawing-page";
 import styled from "styled-components";
 
-import { ReactComponent as PencilIcon } from "src/asset/icon/pencil-icon.svg";
-import { ReactComponent as EraserIcon } from "src/asset/icon/eraser-icon.svg";
+import PencilIcon from "src/asset/icon/pencil-icon.png";
+import EraserIcon from "src/asset/icon/eraser-icon.png";
 
 interface FunctionButtonsProps {
   editMode: EditMode;
@@ -16,14 +16,14 @@ const FunctionButtons = ({ editMode, onClick }: FunctionButtonsProps) => {
         isClicked={editMode === "draw"}
         onClick={() => onClick("draw")}
       >
-        <PencilIcon fill="var(--secondary)" width={40} height={40} />
+        <img src={PencilIcon} alt="pencil-icon" width={40} height={40} />
       </IconButton>
 
       <IconButton
         isClicked={editMode === "erase"}
         onClick={() => onClick("erase")}
       >
-        <EraserIcon fill="var(--secondary)" width={40} height={40} />
+        <img src={EraserIcon} alt="eraser-icon" width={40} height={40} />
       </IconButton>
     </ButtonContainer>
   );
