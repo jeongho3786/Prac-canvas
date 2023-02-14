@@ -5,7 +5,7 @@ const MenuButtons = () => {
   return (
     <ButtonContainer>
       <RouteButton to="mouse-drawing">마우스 드로잉</RouteButton>
-      <RouteButton to="/">임시 홈버튼</RouteButton>
+      <RouteButton to="rain-effect">비 효과</RouteButton>
     </ButtonContainer>
   );
 };
