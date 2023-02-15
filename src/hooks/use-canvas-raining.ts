@@ -26,10 +26,10 @@ const useCanvasRaining = (
 
     // 초기값 설정
     const quantity = 200;
-    let init: RainContainer[] = [];
+    let rainContainer: RainContainer[] = [];
 
-    while (init.length > quantity) {
-      init.push({
+    while (rainContainer.length < quantity) {
+      rainContainer.push({
         positionX: Math.random() * canvasWidth,
         positionY: Math.random() * canvasHeight,
         length: Math.random(),
@@ -38,7 +38,48 @@ const useCanvasRaining = (
       });
     }
 
-    // TODO: 초기 컨테이너 값을 그대로 사용할 수 있지 않을까? + 추가로직
+    const movePath = () => {
+      for (let index = 0; index < rainContainer.length; index++) {
+        const rainInfo = rainContainer[index];
+
+        rainInfo.positionX += rainInfo.slope;
+        rainInfo.positionY += rainInfo.acceleration;
+
+        // 화면 끝까지 빗줄기가 도달했을 경우
+        if (
+          rainInfo.positionX > canvasWidth ||
+          rainInfo.positionY > canvasHeight
+        ) {
+          rainInfo.positionX = Math.random() * canvasWidth;
+          rainInfo.positionY = -20;
+        }
+      }
+    };
+
+    const drawRain = () => {
+      // 그린 빗줄기 삭제
+      canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      for (let index = 0; index < rainContainer.length; index++) {
+        const rain = rainContainer[index];
+
+        canvasContext.beginPath();
+        canvasContext.moveTo(rain.positionX, rain.positionY);
+        canvasContext.lineTo(
+          rain.length * rain.slope + rain.positionX,
+          rain.length * rain.acceleration + rain.positionY
+        );
+        canvasContext.stroke();
+      }
+
+      movePath();
+    };
+
+    const intervalKey = setInterval(drawRain, 30);
+
+    return () => {
+      clearInterval(intervalKey);
+    };
   }, [canvasContext, canvas]);
 };
 
