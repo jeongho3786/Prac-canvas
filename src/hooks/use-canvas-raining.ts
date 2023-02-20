@@ -73,13 +73,17 @@ const useCanvasRaining = (
       }
 
       movePath();
+
+      window.requestAnimationFrame(drawRain);
     };
 
-    const intervalKey = setInterval(drawRain, 30);
+    window.requestAnimationFrame(drawRain);
 
-    return () => {
-      clearInterval(intervalKey);
-    };
+    // const intervalKey = setInterval(drawRain, 30);
+
+    // return () => {
+    //   clearInterval(intervalKey);
+    // };
   }, [canvasContext, canvas]);
 };
 
