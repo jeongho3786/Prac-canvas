@@ -11,7 +11,8 @@ interface PointContainer {
 
 const useCanvasWave = (
   canvasContext: CanvasRenderingContext2D | null,
-  canvas: HTMLCanvasElement | null
+  canvas: HTMLCanvasElement | null,
+  waveNumber: number = 1
 ) => {
   useEffect(() => {
     if (!canvasContext) return;
@@ -20,24 +21,29 @@ const useCanvasWave = (
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
-    // 초기 path 설정
-    const quantity = 4;
-    let pointContainer: PointContainer[] = [];
+    const pathNumber = 4;
+    const dividedWidth = canvasWidth / (pathNumber - 1);
 
-    for (let index = 0; index < quantity; index++) {
-      const dividedWidth = canvasWidth / (quantity - 1);
+    const waveContainer: Array<PointContainer[]> = [];
 
-      pointContainer.push({
-        positionX: dividedWidth * index,
-        positionY: (canvasHeight / 2) * Math.sin(index),
-        fixedPositionY: canvasHeight / 2,
-        maxPositionY: Math.random() * (canvasHeight / 2) * 0.3,
-        acceleration: 0.1,
-        currentSpeed: index,
-      });
+    for (let index = 0; index < waveNumber; index++) {
+      let pointContainer: PointContainer[] = [];
+
+      for (let index = 0; index < pathNumber; index++) {
+        pointContainer.push({
+          positionX: dividedWidth * index,
+          positionY: (canvasHeight / 2) * Math.sin(index),
+          fixedPositionY: canvasHeight / 2,
+          maxPositionY: Math.random() * (canvasHeight / 2) * 0.3,
+          acceleration: 0.1,
+          currentSpeed: index,
+        });
+      }
+
+      waveContainer.push(pointContainer);
     }
 
-    const movePath = () => {
+    const movePath = (pointContainer: PointContainer[]) => {
       pointContainer.forEach((point) => {
         point.currentSpeed += point.acceleration;
 
@@ -47,9 +53,8 @@ const useCanvasWave = (
       });
     };
 
-    const drawWave = () => {
+    const drawWave = (pointContainer: PointContainer[], fillColor: string) => {
       // 초기화
-      canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
       const startPath = pointContainer[0];
       const lastPath = pointContainer[pointContainer.length - 1];
@@ -81,17 +86,31 @@ const useCanvasWave = (
       canvasContext.lineTo(startPath.positionX, canvasHeight);
       canvasContext.lineTo(startPath.positionX, startPath.positionY);
 
-      canvasContext.fillStyle = "rgba(0, 199, 235, 0.4)";
+      canvasContext.fillStyle = fillColor;
       canvasContext.fill();
       canvasContext.closePath();
 
-      movePath();
-
-      window.requestAnimationFrame(drawWave);
+      movePath(pointContainer);
     };
 
-    window.requestAnimationFrame(drawWave);
-  }, [canvasContext, canvas]);
+    const drawWaveContainer = () => {
+      canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      waveContainer.forEach((pointContainer, index) => {
+        drawWave(pointContainer, WAVE_FILL_COLOR[index]);
+      });
+
+      window.requestAnimationFrame(drawWaveContainer);
+    };
+
+    window.requestAnimationFrame(drawWaveContainer);
+  }, [canvasContext, canvas, waveNumber]);
 };
 
 export default useCanvasWave;
+
+const WAVE_FILL_COLOR = [
+  "rgba(0, 199, 235, 0.4)",
+  "rgba(0, 146, 199, 0.4)",
+  "rgba(0, 87, 158, 0.4)",
+];
