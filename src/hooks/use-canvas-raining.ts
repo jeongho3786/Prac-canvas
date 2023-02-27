@@ -19,6 +19,8 @@ const useCanvasRaining = (
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
+    let animationframeId: number;
+
     // 비 모양
     canvasContext.strokeStyle = "#aec2e0";
     canvasContext.lineWidth = 1;
@@ -74,16 +76,14 @@ const useCanvasRaining = (
 
       movePath();
 
-      window.requestAnimationFrame(drawRain);
+      animationframeId = window.requestAnimationFrame(drawRain);
     };
 
-    window.requestAnimationFrame(drawRain);
+    animationframeId = window.requestAnimationFrame(drawRain);
 
-    // const intervalKey = setInterval(drawRain, 30);
-
-    // return () => {
-    //   clearInterval(intervalKey);
-    // };
+    return () => {
+      window.cancelAnimationFrame(animationframeId);
+    };
   }, [canvasContext, canvas]);
 };
 

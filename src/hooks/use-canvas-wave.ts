@@ -18,6 +18,8 @@ const useCanvasWave = (
     if (!canvasContext) return;
     if (!canvas) return;
 
+    let animationframeId: number;
+
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
@@ -32,7 +34,7 @@ const useCanvasWave = (
       for (let index = 0; index < pathNumber; index++) {
         pointContainer.push({
           positionX: dividedWidth * index,
-          positionY: (canvasHeight / 2) * Math.sin(index),
+          positionY: canvasHeight / 2,
           fixedPositionY: canvasHeight / 2,
           maxPositionY: Math.random() * (canvasHeight / 2) * 0.3,
           acceleration: 0.1,
@@ -54,8 +56,6 @@ const useCanvasWave = (
     };
 
     const drawWave = (pointContainer: PointContainer[], fillColor: string) => {
-      // 초기화
-
       const startPath = pointContainer[0];
       const lastPath = pointContainer[pointContainer.length - 1];
 
@@ -100,10 +100,14 @@ const useCanvasWave = (
         drawWave(pointContainer, WAVE_FILL_COLOR[index]);
       });
 
-      window.requestAnimationFrame(drawWaveContainer);
+      animationframeId = window.requestAnimationFrame(drawWaveContainer);
     };
 
-    window.requestAnimationFrame(drawWaveContainer);
+    animationframeId = window.requestAnimationFrame(drawWaveContainer);
+
+    return () => {
+      window.cancelAnimationFrame(animationframeId);
+    };
   }, [canvasContext, canvas, waveNumber]);
 };
 
