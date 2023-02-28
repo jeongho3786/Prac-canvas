@@ -1,3 +1,4 @@
+import type { CanvasSize } from "src/types/canvas-common";
 import { useEffect } from "react";
 
 interface PointContainer {
@@ -9,19 +10,24 @@ interface PointContainer {
   currentSpeed: number;
 }
 
-const useCanvasWave = (
-  canvasContext: CanvasRenderingContext2D | null,
-  canvas: HTMLCanvasElement | null,
-  waveNumber: number = 1
-) => {
+interface UseCanvasWaveParams {
+  canvasContext: CanvasRenderingContext2D | null;
+  waveNumber: number;
+  canvasSize: CanvasSize;
+}
+
+const useCanvasWave = ({
+  canvasContext,
+  waveNumber,
+  canvasSize,
+}: UseCanvasWaveParams) => {
   useEffect(() => {
     if (!canvasContext) return;
-    if (!canvas) return;
 
     let animationframeId: number;
 
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
+    const canvasWidth = canvasSize.width;
+    const canvasHeight = canvasSize.height;
 
     const pathNumber = 4;
     const dividedWidth = canvasWidth / (pathNumber - 1);
@@ -108,7 +114,7 @@ const useCanvasWave = (
     return () => {
       window.cancelAnimationFrame(animationframeId);
     };
-  }, [canvasContext, canvas, waveNumber]);
+  }, [canvasContext, waveNumber, canvasSize]);
 };
 
 export default useCanvasWave;

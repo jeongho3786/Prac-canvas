@@ -1,25 +1,17 @@
-import styled from "styled-components";
-
 import useCanvas from "src/hooks/use-canvas";
 import useCanvasRaining from "src/hooks/use-canvas-raining";
 
+import { Container } from "src/components/common/style";
+
 const RainEffectPage = () => {
-  const { canvasRef, fallbackMessage, canvasContext } = useCanvas();
-  useCanvasRaining(canvasContext, canvasRef.current);
+  const { canvasRef, fallbackMessage, canvasContext, canvasSize } = useCanvas();
+  useCanvasRaining({ canvasContext, canvasSize });
 
   return (
-    <Container>
+    <Container style={{ backgroundColor: "#061928" }}>
       <canvas ref={canvasRef}>{fallbackMessage}</canvas>
     </Container>
   );
 };
 
 export default RainEffectPage;
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  border-radius: 9px;
-  background-color: #061928;
-  overflow: hidden;
-`;

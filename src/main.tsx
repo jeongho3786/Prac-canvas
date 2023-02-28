@@ -31,6 +31,6 @@ const CanvasContainer = styled.div`
   border: solid var(--secondary);
   border-radius: 10px;
   background-color: #ffffff;
-  width: 500px;
-  height: 500px;
+  width: 50vw;
+  height: 50vh;
 `;

@@ -1,11 +1,15 @@
-import styled from "styled-components";
-
 import useCanvas from "src/hooks/use-canvas";
 import useCanvasWave from "src/hooks/use-canvas-wave";
 
+import { Container } from "src/components/common/style";
+
 const WaveEffectPage = () => {
-  const { canvasRef, fallbackMessage, canvasContext } = useCanvas();
-  useCanvasWave(canvasContext, canvasRef.current, 3);
+  const { canvasRef, fallbackMessage, canvasContext, canvasSize } = useCanvas();
+  useCanvasWave({
+    canvasContext,
+    waveNumber: 3,
+    canvasSize,
+  });
 
   return (
     <Container>
@@ -15,10 +19,3 @@ const WaveEffectPage = () => {
 };
 
 export default WaveEffectPage;
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  border-radius: 9px;
-  overflow: hidden;
-`;

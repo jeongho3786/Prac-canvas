@@ -1,3 +1,4 @@
+import type { CanvasSize } from "src/types/canvas-common";
 import { useEffect } from "react";
 
 interface RainContainer {
@@ -8,16 +9,20 @@ interface RainContainer {
   acceleration: number;
 }
 
-const useCanvasRaining = (
-  canvasContext: CanvasRenderingContext2D | null,
-  canvas: HTMLCanvasElement | null
-) => {
+interface UseCanvasRainingParams {
+  canvasContext: CanvasRenderingContext2D | null;
+  canvasSize: CanvasSize;
+}
+
+const useCanvasRaining = ({
+  canvasContext,
+  canvasSize,
+}: UseCanvasRainingParams) => {
   useEffect(() => {
     if (!canvasContext) return;
-    if (!canvas) return;
 
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
+    const canvasWidth = canvasSize.width;
+    const canvasHeight = canvasSize.height;
 
     let animationframeId: number;
 
@@ -84,7 +89,7 @@ const useCanvasRaining = (
     return () => {
       window.cancelAnimationFrame(animationframeId);
     };
-  }, [canvasContext, canvas]);
+  }, [canvasContext, canvasSize]);
 };
 
 export default useCanvasRaining;
