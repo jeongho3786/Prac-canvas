@@ -69,20 +69,20 @@ const useCanvasWave = ({
       canvasContext.moveTo(startPath.positionX, startPath.positionY);
 
       for (let index = 0; index < pointContainer.length - 1; index++) {
-        const currentPoint = pointContainer[index];
-        const nextPoint = pointContainer[index + 1];
+        const controlPoint = pointContainer[index];
+        const nextControlPoint = pointContainer[index + 1];
 
-        // 커브의 경우 현재와 다음 각각의 point의 중간에 연결해야 곡선이 나옴
-        const controlPointX =
-          (currentPoint.positionX + nextPoint.positionX) / 2;
-        const controlPointY =
-          (currentPoint.positionY + nextPoint.positionY) / 2;
+        const nextPointX =
+          (controlPoint.positionX + nextControlPoint.positionX) / 2;
+        const nextPointY =
+          (controlPoint.positionY + nextControlPoint.positionY) / 2;
 
+        // 각 path를 curve point를 잡고 path와 path 사이의 중간 점을 다음 end point로 잡았다.
         canvasContext.quadraticCurveTo(
-          currentPoint.positionX,
-          currentPoint.positionY,
-          controlPointX,
-          controlPointY
+          controlPoint.positionX,
+          controlPoint.positionY,
+          nextPointX,
+          nextPointY
         );
       }
 
