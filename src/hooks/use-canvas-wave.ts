@@ -1,3 +1,4 @@
+import type { CanvasSize } from "src/types/canvas-common";
 import { useEffect } from "react";
 
 interface PointContainer {
@@ -9,17 +10,24 @@ interface PointContainer {
   currentSpeed: number;
 }
 
-const useCanvasWave = (
-  canvasContext: CanvasRenderingContext2D | null,
-  canvas: HTMLCanvasElement | null,
-  waveNumber: number = 1
-) => {
+interface UseCanvasWaveParams {
+  canvasContext: CanvasRenderingContext2D | null;
+  waveNumber: number;
+  canvasSize: CanvasSize;
+}
+
+const useCanvasWave = ({
+  canvasContext,
+  waveNumber,
+  canvasSize,
+}: UseCanvasWaveParams) => {
   useEffect(() => {
     if (!canvasContext) return;
-    if (!canvas) return;
 
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
+    let animationframeId: number;
+
+    const canvasWidth = canvasSize.width;
+    const canvasHeight = canvasSize.height;
 
     const pathNumber = 4;
     const dividedWidth = canvasWidth / (pathNumber - 1);
@@ -32,7 +40,7 @@ const useCanvasWave = (
       for (let index = 0; index < pathNumber; index++) {
         pointContainer.push({
           positionX: dividedWidth * index,
-          positionY: (canvasHeight / 2) * Math.sin(index),
+          positionY: canvasHeight / 2,
           fixedPositionY: canvasHeight / 2,
           maxPositionY: Math.random() * (canvasHeight / 2) * 0.3,
           acceleration: 0.1,
@@ -54,8 +62,6 @@ const useCanvasWave = (
     };
 
     const drawWave = (pointContainer: PointContainer[], fillColor: string) => {
-      // 초기화
-
       const startPath = pointContainer[0];
       const lastPath = pointContainer[pointContainer.length - 1];
 
@@ -63,20 +69,20 @@ const useCanvasWave = (
       canvasContext.moveTo(startPath.positionX, startPath.positionY);
 
       for (let index = 0; index < pointContainer.length - 1; index++) {
-        const currentPoint = pointContainer[index];
-        const nextPoint = pointContainer[index + 1];
+        const controlPoint = pointContainer[index];
+        const nextControlPoint = pointContainer[index + 1];
 
-        // 커브의 경우 현재와 다음 각각의 point의 중간에 연결해야 곡선이 나옴
-        const controlPointX =
-          (currentPoint.positionX + nextPoint.positionX) / 2;
-        const controlPointY =
-          (currentPoint.positionY + nextPoint.positionY) / 2;
+        const nextPointX =
+          (controlPoint.positionX + nextControlPoint.positionX) / 2;
+        const nextPointY =
+          (controlPoint.positionY + nextControlPoint.positionY) / 2;
 
+        // 각 path를 curve point를 잡고 path와 path 사이의 중간 점을 다음 end point로 잡았다.
         canvasContext.quadraticCurveTo(
-          currentPoint.positionX,
-          currentPoint.positionY,
-          controlPointX,
-          controlPointY
+          controlPoint.positionX,
+          controlPoint.positionY,
+          nextPointX,
+          nextPointY
         );
       }
 
@@ -100,11 +106,15 @@ const useCanvasWave = (
         drawWave(pointContainer, WAVE_FILL_COLOR[index]);
       });
 
-      window.requestAnimationFrame(drawWaveContainer);
+      animationframeId = window.requestAnimationFrame(drawWaveContainer);
     };
 
-    window.requestAnimationFrame(drawWaveContainer);
-  }, [canvasContext, canvas, waveNumber]);
+    animationframeId = window.requestAnimationFrame(drawWaveContainer);
+
+    return () => {
+      window.cancelAnimationFrame(animationframeId);
+    };
+  }, [canvasContext, waveNumber, canvasSize]);
 };
 
 export default useCanvasWave;
