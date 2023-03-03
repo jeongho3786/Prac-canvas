@@ -4,6 +4,7 @@ import Main from "../main";
 import MouseDrawingPage from "../pages/mouse-drawing-page";
 import RainEffectPage from "src/pages/rain-effect-page";
 import WaveEffectPage from "src/pages/wave-effect-page";
+import BounceBallPage from "src/pages/bounce-ball-page";
 import TestPage from "src/pages/test-page";
 
 const router = createBrowserRouter([
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "wave-effect",
         element: <WaveEffectPage />,
+      },
+      {
+        path: "bounce-ball",
+        element: <BounceBallPage />,
       },
       {
         path: "test",
